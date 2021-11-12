@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+// import Form from './components/Form';
+// import {Input} from "./components/Input";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import {schema} from "./components/validation";
 
-function App() {
+export default function App() {
+  const {register, handleSubmit, formState: { errors } , reset } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit = (data) => {
+    console.log(data)
+    reset();
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input type="bankName" placeholder="Enter bank name" {...register('bankName')}/>
+      <p>{errors.bankName?.message}</p>
+      <input type="email" placeholder="Enter email" {...register('email')}/>
+      <p>{errors.email?.message}</p>
+      <input type="phone" placeholder="Enter phone" {...register('phone')}/>
+      <p>{errors.phone?.message}</p>
+
+      <input type="submit"/>
+    </form>
   );
 }
 
-export default App;
+// <Form onSubmit={onSubmit}>
+//   <Input name="firstName" />
+//   <Input name="lastName" />
+//
+//   <Input type="submit" value="Submit" />
+// </Form>
